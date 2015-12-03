@@ -1,6 +1,7 @@
 //Arpita Abrol, Niels Graham
 //APCS1 pd10
-//HW40 --
+//HW40 -- Array of Grade 316
+//2015-12-03
 
 /*****************************
  * SKELETON for
@@ -32,8 +33,7 @@ public class SuperArray {
 		
     //~~~~~METHODS~~~~~
     //default constructor – initializes 10-item array
-    public SuperArray() 
-    { 
+    public SuperArray() { 
 	_data = new int[10];
 	_lastPos = -1; //flag to indicate no lastpos yet
 	_size = 0;	
@@ -42,8 +42,7 @@ public class SuperArray {
 		
     //output array in [a,b,c] format, eg
     // {1,2,3}.toString() -> "[1,2,3]"
-    public String toString() 
-    { 
+    public String toString() { 
 	String foo = "[";
 	for( int i = 0; i < _size; i++ ) {
 	    foo += _data[i] + ",";
@@ -57,8 +56,7 @@ public class SuperArray {
 
 		
     //double capacity of this SuperArray
-    private void expand() 
-    { 
+    private void expand() { 
 	int[] temp = new int[ _data.length * 2 ];
 	for( int i = 0; i < _data.length; i++ )
 	    temp[i] = _data[i];
@@ -67,13 +65,14 @@ public class SuperArray {
 
 		
     //accessor -- return value at specified index
-    public int get( int index ) { return _data[index]; }
+    public int get( int index ) {
+	return _data[index];
+    }
 
 		
     //mutator -- set value at index to newVal, 
     //           return old value at index
-    public int set( int index, int newVal ) 
-    { 
+    public int set( int index, int newVal ) { 
  	int temp = _data[index];
 	_data[index] = newVal;
 	return temp;
@@ -82,26 +81,46 @@ public class SuperArray {
 
     // ~~~~~~~~~~~~~~ PHASE II ~~~~~~~~~~~~~~
     //adds an item after the last item
-    public void add( int newVal ) { }
+    public void add( int newVal ) {
+
+    }
 
 
     //inserts an item at index
     //shifts existing elements to the right
-    public void add( int index, int newVal ) { }
+    public void add( int index, int newVal ) {
+
+    }
 
 
     //removes the item at index
     //shifts elements left to fill in newly-empted slot
-    public void remove( int index ) { }
+    public void remove( int index ) {
+	int[] temp = new int[_data.length-1];
+	for ( int i = 0; i < index; i++ ) {
+	    temp[i] = _data[i];
+	}
+	for ( int i = index+1; i < _data.length; i++ ) {
+	    temp[i-1] = _data[i];
+	}
+	if (_lastPos >= index) {
+	    _lastPos -= 1;
+	}
+	_size -= 1;
+	_data = temp;
+    }
 
 
     //return number of meaningful items in _data
-    public int size() { }
+    public int size() {
+	return _lastPos + 1;
+    }
 
 
     //main method for testing
     public static void main( String[] args ) 
     {
+	System.out.println("Begin testing Phase I...");
 	SuperArray curtis = new SuperArray();
 	System.out.println("Printing empty SuperArray curtis...");
 	System.out.println(curtis);
@@ -123,6 +142,13 @@ public class SuperArray {
 	System.out.println("Expanded SuperArray curtis:");
 	curtis.expand();
 	System.out.println(curtis);
+	System.out.println("Printing populated expanded SupperArray curtis...");
+	for( int i = curtis._size; i < curtis._data.length; i++ ) {
+	    curtis.set(i,i*2);
+	    curtis._size++; //necessary bc no add() method yet
+	}
+	System.out.println(curtis);
+	System.out.println("Done testing Phase I...");
 
 	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SuperArray mayfield = new SuperArray();
@@ -157,6 +183,35 @@ public class SuperArray {
 	  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 	//*****INSERT ANY ADDITIONAL TEST CALLS HERE*****
 
+	System.out.println("Begin testing Phase II...");
+
+	SuperArray indigo = new SuperArray();
+	System.out.println("Printing empty SuperArray indigo...");
+	System.out.println(indigo);
+	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
+
+	for( int i = 0; i < indigo._data.length; i++ ) {
+	    indigo.set(i,i*2);
+	    indigo._size++; //necessary bc no add() method yet
+	    indigo._lastPos++;
+	}
+
+	System.out.println("Printing populated SuperArray indigo...");
+	System.out.println(indigo);
+	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
+
+	indigo.remove(1);
+	System.out.println("Printing SuperArray indigo post-remove...");
+	System.out.println(indigo);
+	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
+	indigo.remove(6);
+	System.out.println("Printing SuperArray indigo post-remove...");
+	System.out.println(indigo);
+	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
+
+	
+	System.out.println("Done testing Phase II...");
+	
     }//end main
 		
 }//end class
