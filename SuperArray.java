@@ -83,14 +83,19 @@ public class SuperArray {
     // ~~~~~~~~~~~~~~ PHASE II ~~~~~~~~~~~~~~
     //adds an item after the last item
     public void add( int newVal ) {
-
+    if (_lastPos == -1) //sets last pos to the first value in the array
+	    _lastPos = 0;
+	_data[_lastPos] = newVal;
+	_lastPos += 1;
+	_size += 1;
     }
 
 
     //inserts an item at index
     //shifts existing elements to the right
     public void add( int index, int newVal ) {
-
+	if (_lastPos > index)
+	    _data[index] = newVal;
     }
 
 
@@ -151,7 +156,6 @@ public class SuperArray {
 	System.out.println(curtis);
 	System.out.println("Done testing Phase I...");
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	SuperArray mayfield = new SuperArray();
 	System.out.println("Printing empty SuperArray mayfield...");
 	System.out.println(mayfield);
@@ -181,8 +185,7 @@ public class SuperArray {
 	  mayfield.add(1,77);
 	  System.out.println("Printing SuperArray mayfield post-insert...");
 	  System.out.println(mayfield);
-	  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	//*****INSERT ANY ADDITIONAL TEST CALLS HERE*****
+	  //*****INSERT ANY ADDITIONAL TEST CALLS HERE*****
 
 	System.out.println("Begin testing Phase II...");
 
