@@ -1,7 +1,7 @@
-//Arpita Abrol, Niels Graham
-//APCS1 pd10
-//HW40 -- Array of Grade 316
-//2015-12-03
+//Team orange-bananas -- Jannie Li, Arpita Abrol
+//APCS pd10
+//HW42 -- Array of Titanium
+//2015-12-04
 
 /*****************************
  * SKELETON for
@@ -18,8 +18,7 @@
  *  remove item (while maintaining "left-justification")
  *****************************/
 
-
-public class SuperArray {
+public class SuperArray implements ListInt {
  
     //~~~~~INSTANCE VARS~~~~~
     //underlying container, or "core" of this data structure:
@@ -34,7 +33,8 @@ public class SuperArray {
 		
     //~~~~~METHODS~~~~~
     //default constructor – initializes 10-item array
-    public SuperArray() { 
+    public SuperArray() 
+    { 
 	_data = new int[10];
 	_lastPos = -1; //flag to indicate no lastpos yet
 	_size = 0;	
@@ -43,7 +43,8 @@ public class SuperArray {
 		
     //output array in [a,b,c] format, eg
     // {1,2,3}.toString() -> "[1,2,3]"
-    public String toString() { 
+    public String toString() 
+    { 
 	String foo = "[";
 	for( int i = 0; i < _size; i++ ) {
 	    foo += _data[i] + ",";
@@ -57,7 +58,8 @@ public class SuperArray {
 
 		
     //double capacity of this SuperArray
-    private void expand() { 
+    private void expand() 
+    { 
 	int[] temp = new int[ _data.length * 2 ];
 	for( int i = 0; i < _data.length; i++ )
 	    temp[i] = _data[i];
@@ -66,14 +68,13 @@ public class SuperArray {
 
 		
     //accessor -- return value at specified index
-    public int get( int index ) {
-	return _data[index];
-    }
+    public int get( int index ) { return _data[index]; }
 
 		
     //mutator -- set value at index to newVal, 
     //           return old value at index
-    public int set( int index, int newVal ) { 
+    public int set( int index, int newVal ) 
+    { 
  	int temp = _data[index];
 	_data[index] = newVal;
 	return temp;
@@ -82,10 +83,15 @@ public class SuperArray {
 
     // ~~~~~~~~~~~~~~ PHASE II ~~~~~~~~~~~~~~
     //adds an item after the last item
-    public void add( int newVal ) {
-    if (_lastPos == -1) //sets last pos to the first value in the array
-	    _lastPos = 0;
-	_data[_lastPos] = newVal;
+    public void add( int newVal )
+    {
+	//make sure there's room
+        if (_data.length == _size) {
+	    this.expand();
+	}
+
+	//add and update vars
+	_data[_lastPos + 1] = newVal; 
 	_lastPos += 1;
 	_size += 1;
     }
@@ -93,41 +99,60 @@ public class SuperArray {
 
     //inserts an item at index
     //shifts existing elements to the right
-    public void add( int index, int newVal ) {
-	if (_lastPos > index)
+    public void add( int index, int newVal )
+    {
+	//make sure there's room
+        if (_data.length == _size) {
+	    this.expand();
+	}
+
+	//if index after lastPos, just add it last
+	if (index > _lastPos) {
+	    add(newVal);
+	    //add already updates vars
+	}
+
+	//otherwise shift and add
+	else {
+	    //shift right
+	    for (int i = _lastPos ; i >= index ; i--) {
+		_data[i+1] = _data[i];
+	    }
+
+	    //add and update vars
 	    _data[index] = newVal;
+	    _lastPos += 1;
+	    _size += 1;
+	}
     }
 
 
     //removes the item at index
     //shifts elements left to fill in newly-empted slot
-    public void remove( int index ) {
-	int[] temp = new int[_data.length-1];
-	for ( int i = 0; i < index; i++ ) {
-	    temp[i] = _data[i];
+    public void remove( int index )
+    {
+	//shift left, item to remove doesn't matter
+	for (int i = index ; i < _lastPos ; i++) {
+	    _data[i] = _data[i+1];
 	}
-	for ( int i = index+1; i < _data.length; i++ ) {
-	    temp[i-1] = _data[i];
-	}
-	if (_lastPos >= index) {
-	    _lastPos -= 1;
-	}
+
+	//update vars
+	_lastPos -= 1;
 	_size -= 1;
-	_data = temp;
     }
 
 
     //return number of meaningful items in _data
-    public int size() {
-	return _lastPos + 1;
+    public int size()
+    {
+        return _lastPos + 1;
     }
 
 
     //main method for testing
     public static void main( String[] args ) 
     {
-	System.out.println("Begin testing Phase I...");
-	SuperArray curtis = new SuperArray();
+        SuperArray curtis = new SuperArray();
 	System.out.println("Printing empty SuperArray curtis...");
 	System.out.println(curtis);
 
@@ -148,74 +173,64 @@ public class SuperArray {
 	System.out.println("Expanded SuperArray curtis:");
 	curtis.expand();
 	System.out.println(curtis);
-	System.out.println("Printing populated expanded SupperArray curtis...");
-	for( int i = curtis._size; i < curtis._data.length; i++ ) {
-	    curtis.set(i,i*2);
-	    curtis._size++; //necessary bc no add() method yet
-	}
-	System.out.println(curtis);
-	System.out.println("Done testing Phase I...");
 
-	SuperArray mayfield = new SuperArray();
+	//============================================
+	//PHASE II
+	
+	ListInt mayfield = new SuperArray();
 	System.out.println("Printing empty SuperArray mayfield...");
 	System.out.println(mayfield);
 
-	  mayfield.add(5);
-	  mayfield.add(4);
-	  mayfield.add(3);
-	  mayfield.add(2);
-	  mayfield.add(1);
+	mayfield.add(5);
+	mayfield.add(4);
+	mayfield.add(3);
+	mayfield.add(2);
+	mayfield.add(1);
 
-	  System.out.println("Printing populated SuperArray mayfield...");
-	  System.out.println(mayfield);
+	System.out.println("Printing populated SuperArray mayfield...");
+	System.out.println(mayfield);
 
-	  mayfield.remove(3);
-	  System.out.println("Printing SuperArray mayfield post-remove...");
-	  System.out.println(mayfield);
-	  mayfield.remove(3);
-	  System.out.println("Printing SuperArray mayfield post-remove...");
-	  System.out.println(mayfield);
+	mayfield.remove(3);
+	System.out.println("Printing SuperArray mayfield post-remove...");
+	System.out.println(mayfield);
+	mayfield.remove(3);
+	System.out.println("Printing SuperArray mayfield post-remove...");
+	System.out.println(mayfield);
+        
+	mayfield.add(3,99);
+	System.out.println("Printing SuperArray mayfield post-insert...");
+	System.out.println(mayfield);
+	mayfield.add(2,88);
+	System.out.println("Printing SuperArray mayfield post-insert...");
+	System.out.println(mayfield);
+	mayfield.add(1,77);
+	System.out.println("Printing SuperArray mayfield post-insert...");
+	System.out.println(mayfield);
 
-	  mayfield.add(3,99);
-	  System.out.println("Printing SuperArray mayfield post-insert...");
-	  System.out.println(mayfield);
-	  mayfield.add(2,88);
-	  System.out.println("Printing SuperArray mayfield post-insert...");
-	  System.out.println(mayfield);
-	  mayfield.add(1,77);
-	  System.out.println("Printing SuperArray mayfield post-insert...");
-	  System.out.println(mayfield);
-	  //*****INSERT ANY ADDITIONAL TEST CALLS HERE*****
+	// =========== extras ===========
 
-	System.out.println("Begin testing Phase II...");
+	System.out.println("Printing SuperArray mayfield's size...");
+	System.out.println(mayfield.size());
 
-	SuperArray indigo = new SuperArray();
-	System.out.println("Printing empty SuperArray indigo...");
-	System.out.println(indigo);
-	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
-
-	for( int i = 0; i < indigo._data.length; i++ ) {
-	    indigo.set(i,i*2);
-	    indigo._size++; //necessary bc no add() method yet
-	    indigo._lastPos++;
+	System.out.println("Testing that ensuring space works out");
+        ListInt grr = new SuperArray();
+	
+	for (int i = 1 ; i < 12 ; i++) {
+	    grr.add(i);
 	}
-
-	System.out.println("Printing populated SuperArray indigo...");
-	System.out.println(indigo);
-	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
-
-	indigo.remove(1);
-	System.out.println("Printing SuperArray indigo post-remove...");
-	System.out.println(indigo);
-	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
-	indigo.remove(6);
-	System.out.println("Printing SuperArray indigo post-remove...");
-	System.out.println(indigo);
-	System.out.println("_size: " + indigo._size + "\n_lastPos: " + indigo._lastPos + "\nsize: " + indigo.size());
-
 	
-	System.out.println("Done testing Phase II...");
-	
+	System.out.println(grr);
+
+	// ========== PHASE III ADDITONS =========
+
+	System.out.println("Testing grr's set method");
+	System.out.println(grr.set( 0, 52 ));
+	System.out.println(grr);
+
+	System.out.println("Testing grr's get method");
+	System.out.println(grr.get( 0 ));
+
+
     }//end main
 		
 }//end class
